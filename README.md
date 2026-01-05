@@ -23,7 +23,7 @@ A **RESTful Weather API** built with **Spring Boot** to fetch real-time weather 
 - **Spring Boot 3.x**
 - **Maven**
 - **RESTful Web Services**
-- **External Weather API** (e.g., OpenWeatherMap)
+- **External Weather API** (e.g., [OpenWeatherMap](https://www.weatherapi.com/))
 
 ---
 
