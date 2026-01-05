@@ -31,6 +31,6 @@ A **RESTful Weather API** built with **Spring Boot** to fetch real-time weather 
 
 Watch the app in action!  
 
-![Weather API Demo](weatherapigif.gif)
+![Weather API Demo](weatherapi.gif)
 
 
