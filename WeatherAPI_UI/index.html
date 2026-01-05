@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Forecast App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Search Form -->
+      <div id="searchForm" class="form-container">
+        <div class="form-content">
+          <div class="form-header">
+            <div class="weather-icon-large">
+              <svg
+                class="sun-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+            <h1>Weather Forecast</h1>
+            <p>Get accurate weather information for any city</p>
+          </div>
+
+          <form id="weatherForm">
+            <div class="form-group">
+              <label for="cityInput">City Name</label>
+              <input
+                type="text"
+                id="cityInput"
+                placeholder="Enter city name (e.g., Pune, Mumbai)"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="daysInput">Number of Days</label>
+              <select id="daysInput">
+                <option value="1">1 Day</option>
+                <option value="2">2 Days</option>
+                <option value="3" selected>3 Days</option>
+                <option value="4">4 Days</option>
+                <option value="5">5 Days</option>
+                <option value="7">7 Days</option>
+              </select>
+            </div>
+
+            <div
+              id="errorMessage"
+              class="error-message"
+              style="display: none"
+            ></div>
+
+            <button type="submit" class="submit-btn">
+              Get Weather Forecast
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="loading-container" style="display: none">
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <div class="loading-text">Loading weather data...</div>
+        </div>
+      </div>
+
+      <!-- Weather Display -->
+      <div id="weatherDisplay" class="weather-container" style="display: none">
+        <div class="weather-card">
+          <!-- Header -->
+          <div class="weather-header">
+            <div>
+              <h1 class="header-title">
+                Results for <span id="cityName"></span>
+              </h1>
+            </div>
+            <button id="newSearchBtn" class="new-search-btn">New Search</button>
+          </div>
+
+          <!-- Current Weather -->
+          <div class="current-weather">
+            <div class="weather-main">
+              <div class="weather-icon-container">
+                <div class="weather-icon-bg">
+                  <svg
+                    id="currentWeatherIcon"
+                    class="weather-icon-svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <!-- Icon will be inserted by JS -->
+                  </svg>
+                </div>
+              </div>
+              <div class="temperature-info">
+                <div class="temperature-display">
+                  <span id="currentTemp" class="temp-value">--</span>
+                  <span class="temp-unit">°C</span>
+                </div>
+                <div class="weather-details">
+                  <div>Humidity: 45%</div>
+                  <div>Wind: 10 km/h</div>
+                </div>
+              </div>
+            </div>
+            <div class="weather-info">
+              <div class="info-title">Weather</div>
+              <div class="info-time">Monday, 1:00 pm</div>
+              <div id="weatherSituation" class="info-situation">--</div>
+            </div>
+          </div>
+
+          <!-- Temperature Chart -->
+          <div class="chart-section">
+            <div class="chart-tabs">
+              <button class="tab-btn active">Temperature</button>
+              <button class="tab-btn">Precipitation</button>
+              <button class="tab-btn">Wind</button>
+            </div>
+
+            <div class="chart-container">
+              <svg
+                id="tempChart"
+                class="temp-chart"
+                viewBox="0 0 800 120"
+                preserveAspectRatio="none"
+              >
+                <!-- Chart will be drawn by JS -->
+              </svg>
+            </div>
+          </div>
+
+          <!-- Forecast Days -->
+          <div id="forecastDays" class="forecast-grid">
+            <!-- Forecast cards will be inserted by JS -->
+          </div>
+
+          <!-- Footer -->
+          <div class="weather-footer">
+            <button id="feedbackBtn" class="footer-btn">Feedback</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Modal -->
+      <div id="feedbackModal" class="modal" style="display: none">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Contact & Feedback</h2>
+            <button class="modal-close" id="modalClose">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="contact-section">
+            <div class="developer-card">
+              <div class="developer-avatar">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <h3 class="developer-name">Pratham Tanpure</h3>
+              <p class="developer-title">Weather App Developer</p>
+
+              <div class="contact-info">
+                <div class="contact-item">
+                  <svg
+                    class="contact-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                    ></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <div class="contact-details">
+                    <span class="contact-label">Email</span>
+                    <a
+                      href="mailto:pratham3778@gmail.com"
+                      class="contact-value"
+                    >
+                      pratham3778@gmail.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button class="action-btn primary-action" id="copyEmailBtn">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect
+                      x="9"
+                      y="9"
+                      width="13"
+                      height="13"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path
+                      d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    ></path>
+                  </svg>
+                  <span id="copyBtnText">Copy Email</span>
+                </button>
+                <a
+                  href="mailto:pratham3778@gmail.com"
+                  class="action-btn secondary-action"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                    ></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  Send Email
+                </a>
+              </div>
+
+              <div class="feedback-note">
+                <svg
+                  class="note-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <p>
+                  Feel free to reach out for any feedback, suggestions, or bug
+                  reports. I'd love to hear from you!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
